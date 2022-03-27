@@ -9,7 +9,7 @@ from flax.training.train_state import TrainState
 from flax.training import checkpoints
 
 from models import UNet
-from data import read_data
+from data import read_train_data, read_predict_data, save_image
 
 CKPT_DIR = 'ckpts'
 IMAGE_SIZE = 512
@@ -61,7 +61,7 @@ def train_step(x, y, train_state, is_training=True):
 
 
 def main():
-    train_set = read_data()
+    train_set = read_train_data()
     unet = UNet()
 
     init_rngs = {'params': jax.random.PRNGKey(0), 'dropout': jax.random.PRNGKey(1)}
@@ -85,6 +85,27 @@ def main():
         loss_avg /= len(train_set)
         elapsed = time.time() - tic
         print(f"epoch: {e}, loss: {loss_avg:0.2f}, elapased: {elapsed:0.2f}")
+
+
+def predict():
+    data = read_predict_data()
+    unet = UNet(training=False)
+
+    init_rngs = {'params': jax.random.PRNGKey(0), 'dropout': jax.random.PRNGKey(1)}
+
+    unet_variables = unet.init(init_rngs, jnp.ones([1, IMAGE_SIZE, IMAGE_SIZE, 3]))
+
+    optimizer = optax.adam(learning_rate=0.001)
+
+    train_state = CustomTrainState.create(apply_fn=unet.apply, params=unet_variables["params"], tx=optimizer,
+                                          batch_stats=unet_variables["batch_stats"])
+
+    checkpoints.restore_checkpoint(ckpt_dir=CKPT_DIR, target=train_state)
+
+    pred, _ = train_state.apply_fn_with_bn({"params": train_state.params, "batch_stats": train_state.batch_stats}, data)
+
+    save_image(pred)
+
 
 
 if __name__ == '__main__':
