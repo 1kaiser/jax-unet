@@ -107,6 +107,5 @@ def predict():
     save_image(pred)
 
 
-
 if __name__ == '__main__':
     main()

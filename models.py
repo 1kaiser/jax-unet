@@ -110,7 +110,7 @@ class UNet(fnn.Module):
 
     @fnn.compact
     def __call__(self, x):
-        z1, z2, z3, z4_dropout, z5_dropout = Encoder()(x)
-        y = Decoder()(z1, z2, z3, z4_dropout, z5_dropout)
+        z1, z2, z3, z4_dropout, z5_dropout = Encoder(self.training)(x)
+        y = Decoder(self.training)(z1, z2, z3, z4_dropout, z5_dropout)
 
         return y
