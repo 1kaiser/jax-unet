@@ -1,3 +1,3 @@
 # jax U-Net
 
-U-Net written by jax and flax
+U-Net written in jax and flax
