@@ -4,9 +4,8 @@
 # jax U-Net
 
 U-Net written in jax and flax
+![image1](https://user-images.githubusercontent.com/26379748/210260097-da2793f0-5e2d-4748-9445-f3f6757ef6f8.png)
 
 
-![Model diagram](https://github.com/1kaiser/jax-unet/blob/master/media/image1.png)
 
-
-![Usage diagram](https://github.com/1kaiser/jax-unet/blob/master/media/image2.png)
+![image2](https://user-images.githubusercontent.com/26379748/210260178-0e943f44-ecfb-4718-bf6f-b1d840f11c51.png)
